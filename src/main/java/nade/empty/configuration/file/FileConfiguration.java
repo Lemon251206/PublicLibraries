@@ -91,7 +91,7 @@ public abstract class FileConfiguration extends MemoryConfiguration {
     public void save(@NotNull String file) throws IOException {
         Validate.notNull(file, "File cannot be null");
 
-        save(new File(file));
+        this.save(new File(file));
     }
 
     /**
