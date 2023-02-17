@@ -1,4 +1,4 @@
-package nade.empty.configuration.file;
+package nade.empty.configuration.file.yaml;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -9,6 +9,8 @@ import org.apache.commons.lang.Validate;
 import nade.empty.configuration.Configuration;
 import nade.empty.configuration.ConfigurationSection;
 import nade.empty.configuration.InvalidConfigurationException;
+import nade.empty.configuration.file.FileConfiguration;
+
 import org.jetbrains.annotations.NotNull;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.LoaderOptions;
@@ -29,7 +31,11 @@ public class YamlConfiguration extends FileConfiguration {
     private final Yaml yaml = new Yaml(new YamlConstructor(), yamlRepresenter, yamlOptions, loaderOptions);
 
     public YamlConfiguration(File baseFile) {
-        super(baseFile);
+        this(null, baseFile);
+    }
+
+    public YamlConfiguration(Configuration def, File baseFile) {
+        super(def, baseFile);
     }
 
     @NotNull
@@ -64,6 +70,7 @@ public class YamlConfiguration extends FileConfiguration {
         }
 
         String header = parseHeader(contents);
+        System.out.println(header);
         if (header.length() > 0) {
             options().header(header);
         }
@@ -120,7 +127,7 @@ public class YamlConfiguration extends FileConfiguration {
 
     @NotNull
     @Override
-    protected String buildHeader() {
+    public String buildHeader() {
         String header = options().header();
 
         if (options().copyHeader()) {

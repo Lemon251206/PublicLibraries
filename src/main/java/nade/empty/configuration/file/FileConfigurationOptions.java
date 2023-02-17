@@ -2,6 +2,7 @@ package nade.empty.configuration.file;
 
 import nade.empty.configuration.MemoryConfiguration;
 import nade.empty.configuration.MemoryConfigurationOptions;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

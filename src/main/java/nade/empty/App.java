@@ -1,12 +1,8 @@
 package nade.empty;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.Map;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import nade.empty.configuration.simple.YamlBuild;
+import nade.empty.configuration.simple.JsonBuild;
 
 /**
  * Hello world!
@@ -14,17 +10,13 @@ import nade.empty.configuration.simple.YamlBuild;
  */
 public class App {
     public static void main( String[] args ) throws IOException {
-        
-        ObjectMapper mapper = new ObjectMapper();
-
-        Map<?, ?> input = mapper.readValue(new File("C:\\Users\\Administrator\\Desktop\\server\\test.json"), Map.class);
-
-        System.out.println(input.get("test-1").getClass());
+        new App().onEnable();
     }
 
     private void onEnable() {
-        YamlBuild.build("C:\\Users\\Administrator\\Desktop\\server\\testing.yml").create()
+        JsonBuild.build("C:\\Users\\Administrator\\Desktop\\server\\testing").create()
             .setIfNull("test-3.enable", true)
+            .setIfNull("test-2.lmao", "empty")
             .save();
     }
 }

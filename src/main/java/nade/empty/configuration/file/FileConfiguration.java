@@ -28,9 +28,6 @@ public abstract class FileConfiguration extends MemoryConfiguration {
     /**
      * Creates an empty {@link FileConfiguration} with no default values.
      */
-    public FileConfiguration(File baseFile) {
-        super(baseFile);
-    }
 
     /**
      * Creates an empty {@link FileConfiguration} using the specified {@link
@@ -38,7 +35,7 @@ public abstract class FileConfiguration extends MemoryConfiguration {
      *
      * @param defaults Default value provider
      */
-    public FileConfiguration(@Nullable Configuration defaults) {
+    public FileConfiguration(@Nullable Configuration defaults, File baseFile) {
         super(defaults);
     }
 
@@ -216,7 +213,8 @@ public abstract class FileConfiguration extends MemoryConfiguration {
      * @return Compiled header
      */
     @NotNull
-    protected abstract String buildHeader();
+    public
+    abstract String buildHeader();
 
     @NotNull
     @Override

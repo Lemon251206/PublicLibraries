@@ -4,28 +4,34 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
-import nade.empty.configuration.file.YamlConfiguration;
+import nade.empty.configuration.Configuration;
+import nade.empty.configuration.file.FileConfiguration;
+import nade.empty.configuration.file.yaml.YamlConfiguration;
 import nade.empty.developers.DeveloperMode;
 
-public class YamlBuild {
+public class YamlBuild extends ConfigurationBuild{
     
-    private String path;
+    private static final String identifier = ".yml";
 
-    private YamlConfiguration configuration;
+    private String path;
 
     private YamlBuild(String path) {
         this.path = path;
     }
 
+    private YamlBuild(Configuration configuration) {
+        this.configuration = configuration;
+        if (!Objects.isNull(configuration)) {
+            this.path = configuration.getBaseFile().getPath();
+        }
+    }
+
     public static YamlBuild build(String path) {
-        return new YamlBuild(path);
+        return new YamlBuild(path + identifier);
     }
 
-    public YamlBuild create() {
-        return this.create(false);
-    }
-
-    public YamlBuild create(boolean replace) {
+    @Override
+    public ConfigurationBuild create(boolean replace) {
         DeveloperMode.notEmpty(path, "The path cannot be null or empty.");
         File file = new File(path);
 
@@ -44,32 +50,18 @@ public class YamlBuild {
         return this;
     }
 
-    private void createFile(String config, File file) throws IOException {
-		File parentFile = file.getParentFile();
-		if(parentFile != null && !parentFile.exists() && !parentFile.mkdirs()) {
-			DeveloperMode.log("WARN", "Failed to save default config '" + config + "' because the parent folder could not be created.");
-			return;
-		}
-		if(!file.createNewFile()) {
-			DeveloperMode.log("WARN", "Failed to save default config '" + config + "' because the file could not be created.");
-			return;
-		}
-    }
-
-    public YamlBuild reload() {
+    @Override
+    public ConfigurationBuild reload() {
         this.configuration = YamlConfiguration.loadConfiguration(new File(path));
         return this;
     }
 
-    public YamlBuild save() {
-        return this.save(false);
-    }
-
-    public YamlBuild save(boolean copyDefault) {
+    @Override
+    public ConfigurationBuild save(boolean copyDefault) {
         if (Objects.isNull(configuration)) return this;
         try {
             this.configuration.options().copyDefaults(copyDefault);
-            this.configuration.save(configuration.getBaseFile());
+            ((FileConfiguration) this.configuration).save(configuration.getBaseFile());
             return reload();
         } catch (IOException e) {
             DeveloperMode.log("WARN", "An I/O exception occurred while saving a configuration file: " + configuration.getBaseFile().getPath());
@@ -77,17 +69,9 @@ public class YamlBuild {
         return this;
     }
 
-    public YamlBuild set(String key, Object object) {
-        if (!Objects.isNull(configuration)) this.configuration.set(key, object);
-        return this;
-    }
-
-    public YamlBuild setIfNull(String key, Object objects) {
-        if (!Objects.isNull(configuration)) {
-            if (!configuration.contains(key)) {
-                this.configuration.set(key, objects);
-            }
-        }
-        return this;
+    @Override
+    public ConfigurationBuild getDefault() {
+        if (Objects.isNull(configuration) || Objects.isNull(configuration.getDefaults())) return null;
+        return new YamlBuild(configuration.getDefaults());
     }
 }

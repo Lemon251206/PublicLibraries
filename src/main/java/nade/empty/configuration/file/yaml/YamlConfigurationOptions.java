@@ -1,8 +1,10 @@
-package nade.empty.configuration.file;
+package nade.empty.configuration.file.yaml;
 
 import org.apache.commons.lang.Validate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import nade.empty.configuration.file.FileConfigurationOptions;
 
 /**
  * Various settings for controlling the input and output of a {@link

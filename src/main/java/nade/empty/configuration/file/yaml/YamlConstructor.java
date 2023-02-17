@@ -1,4 +1,4 @@
-package nade.empty.configuration.file;
+package nade.empty.configuration.file.yaml;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
