@@ -132,7 +132,7 @@ public class JsonConfiguration extends FileConfiguration{
             System.out.println("Cannot load " + file);
             ex.printStackTrace();
         }
-
+        
         return json;
     }
 

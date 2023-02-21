@@ -7,7 +7,6 @@ import java.io.Reader;
 import java.util.Map;
 import org.apache.commons.lang.Validate;
 import nade.empty.configuration.Configuration;
-import nade.empty.configuration.ConfigurationSection;
 import nade.empty.configuration.InvalidConfigurationException;
 import nade.empty.configuration.file.FileConfiguration;
 
@@ -70,7 +69,6 @@ public class YamlConfiguration extends FileConfiguration {
         }
 
         String header = parseHeader(contents);
-        System.out.println(header);
         if (header.length() > 0) {
             options().header(header);
         }
@@ -79,19 +77,6 @@ public class YamlConfiguration extends FileConfiguration {
 
         if (input != null) {
             convertMapsToSections(input, this);
-        }
-    }
-
-    protected void convertMapsToSections(@NotNull Map<?, ?> input, @NotNull ConfigurationSection section) {
-        for (Map.Entry<?, ?> entry : input.entrySet()) {
-            String key = entry.getKey().toString();
-            Object value = entry.getValue();
-
-            if (value instanceof Map) {
-                convertMapsToSections((Map<?, ?>) value, section.createSection(key));
-            } else {
-                section.set(key, value);
-            }
         }
     }
 

@@ -12,8 +12,11 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
+import java.util.Map;
+
 import org.apache.commons.lang.Validate;
 import nade.empty.configuration.Configuration;
+import nade.empty.configuration.ConfigurationSection;
 import nade.empty.configuration.InvalidConfigurationException;
 import nade.empty.configuration.MemoryConfiguration;
 import org.jetbrains.annotations.NotNull;
@@ -201,6 +204,19 @@ public abstract class FileConfiguration extends MemoryConfiguration {
      * @throws IllegalArgumentException Thrown if contents is null.
      */
     public abstract void loadFromString(@NotNull String contents) throws InvalidConfigurationException;
+
+    protected void convertMapsToSections(@NotNull Map<?, ?> input, @NotNull ConfigurationSection section) {
+        for (Map.Entry<?, ?> entry : input.entrySet()) {
+            String key = entry.getKey().toString();
+            Object value = entry.getValue();
+
+            if (value instanceof Map) {
+                convertMapsToSections((Map<?, ?>) value, section.createSection(key));
+            } else {
+                section.set(key, value); 
+            }
+        }
+    }
 
     /**
      * Compiles the header for this {@link FileConfiguration} and returns the
