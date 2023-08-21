@@ -15,11 +15,7 @@ public abstract class ConfigurationBuild {
     
     protected Configuration configuration;
 
-    public ConfigurationBuild create() {
-        return this.create(false);
-    }
-
-    public abstract ConfigurationBuild create(boolean replace);
+    protected abstract ConfigurationBuild create(boolean replace);
 
     protected void createFile(String config, File file) throws IOException {
 		File parentFile = file.getParentFile();
@@ -40,11 +36,15 @@ public abstract class ConfigurationBuild {
     }
 
     public ConfigurationBuild save(boolean copyDefault) {
+        return this.save(copyDefault, true);
+    }
+
+    public ConfigurationBuild save(boolean copyDefault, boolean reload) {
         if (Objects.isNull(configuration)) return this;
         try {
             this.configuration.options().copyDefaults(copyDefault);
             ((FileConfiguration) this.configuration).save(configuration.getBaseFile());
-            return this.reload();
+            if (reload) return this.reload();
         } catch (IOException e) {
             DeveloperMode.log("WARN", "An I/O exception occurred while saving a configuration file: " + configuration.getBaseFile().getPath());
         }

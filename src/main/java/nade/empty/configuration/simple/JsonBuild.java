@@ -16,8 +16,9 @@ public class JsonBuild extends ConfigurationBuild{
 
     private String path;
 
-    private JsonBuild(String path) {
+    private JsonBuild(String path, boolean replace) {
         this.path = path;
+        this.create(replace);
     }
 
     private JsonBuild(Configuration configuration) {
@@ -28,12 +29,8 @@ public class JsonBuild extends ConfigurationBuild{
         }
     }
 
-    public static ConfigurationBuild build(String path) {
-        return new JsonBuild(path + identifier);
-    }
-
     @Override
-    public ConfigurationBuild create(boolean replace) {
+    protected ConfigurationBuild create(boolean replace) {
         DeveloperMode.notEmpty(path, "The path cannot be null or empty.");
         File file = new File(path);
 
@@ -62,5 +59,15 @@ public class JsonBuild extends ConfigurationBuild{
     public ConfigurationBuild getDefault() {
         if (Objects.isNull(configuration) || Objects.isNull(configuration.getDefaults())) return null;
         return new JsonBuild(configuration.getDefaults());
+    }
+
+    public static JsonBuild build(String path) {
+        return JsonBuild.build(path, true);
+    }
+
+    public static JsonBuild build(String path, boolean replace) {
+        StringBuilder build = new StringBuilder(path);
+        if (!path.endsWith(identifier)) build.append(identifier);
+        return new JsonBuild(build.toString(), replace);
     }
 }

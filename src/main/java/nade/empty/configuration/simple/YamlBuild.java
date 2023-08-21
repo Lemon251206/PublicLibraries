@@ -15,8 +15,9 @@ public class YamlBuild extends ConfigurationBuild{
 
     private String path;
 
-    private YamlBuild(String path) {
+    private YamlBuild(String path, boolean replace) {
         this.path = path;
+        this.create(replace);
     }
 
     private YamlBuild(Configuration configuration) {
@@ -26,12 +27,8 @@ public class YamlBuild extends ConfigurationBuild{
         }
     }
 
-    public static YamlBuild build(String path) {
-        return new YamlBuild(path + identifier);
-    }
-
     @Override
-    public ConfigurationBuild create(boolean replace) {
+    protected ConfigurationBuild create(boolean replace) {
         DeveloperMode.notEmpty(path, "The path cannot be null or empty.");
         File file = new File(path);
 
@@ -58,11 +55,16 @@ public class YamlBuild extends ConfigurationBuild{
 
     @Override
     public ConfigurationBuild save(boolean copyDefault) {
+        return this.save(copyDefault, true);
+    }
+
+    @Override
+    public ConfigurationBuild save(boolean copyDefault, boolean reload) {
         if (Objects.isNull(configuration)) return this;
         try {
             this.configuration.options().copyDefaults(copyDefault);
             ((FileConfiguration) this.configuration).save(configuration.getBaseFile());
-            return reload();
+            if (reload) return this.reload();
         } catch (IOException e) {
             DeveloperMode.log("WARN", "An I/O exception occurred while saving a configuration file: " + configuration.getBaseFile().getPath());
         }
@@ -73,5 +75,15 @@ public class YamlBuild extends ConfigurationBuild{
     public ConfigurationBuild getDefault() {
         if (Objects.isNull(configuration) || Objects.isNull(configuration.getDefaults())) return null;
         return new YamlBuild(configuration.getDefaults());
+    }
+
+    public static YamlBuild build(String path) {
+        return YamlBuild.build(path, false);
+    }
+
+    public static YamlBuild build(String path, boolean replace) {
+        StringBuilder build = new StringBuilder(path);
+        if (!path.endsWith(identifier)) build.append(identifier);
+        return new YamlBuild(build.toString(), replace);
     }
 }

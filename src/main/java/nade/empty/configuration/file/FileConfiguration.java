@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.commons.lang.Validate;
@@ -19,8 +20,11 @@ import nade.empty.configuration.Configuration;
 import nade.empty.configuration.ConfigurationSection;
 import nade.empty.configuration.InvalidConfigurationException;
 import nade.empty.configuration.MemoryConfiguration;
+import nade.empty.configuration.serialization.ConfigurationSerialization;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.yaml.snakeyaml.error.YAMLException;
 
 /**
  * This is a base class for all File based implementations of {@link
@@ -211,7 +215,21 @@ public abstract class FileConfiguration extends MemoryConfiguration {
             Object value = entry.getValue();
 
             if (value instanceof Map) {
-                convertMapsToSections((Map<?, ?>) value, section.createSection(key));
+                Map<?, ?> raw = (Map<?, ?>) value;
+                if (raw.containsKey(ConfigurationSerialization.SERIALIZED_TYPE_KEY)) {
+                    Map<String, Object> typed = new LinkedHashMap<String, Object>(raw.size());
+                    for (Map.Entry<?, ?> entry1 : raw.entrySet()) {
+                        typed.put(entry1.getKey().toString(), entry1.getValue());
+                    }
+
+                    try {
+                        section.set(key, ConfigurationSerialization.deserializeObject(typed));
+                    } catch (IllegalArgumentException ex) {
+                        throw new YAMLException("Could not deserialize object", ex);
+                    }
+                }else {
+                    convertMapsToSections((Map<?, ?>) value, section.createSection(key));
+                }
             } else {
                 section.set(key, value); 
             }
