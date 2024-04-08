@@ -24,7 +24,6 @@ import nade.empty.configuration.serialization.ConfigurationSerialization;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.yaml.snakeyaml.error.YAMLException;
 
 /**
  * This is a base class for all File based implementations of {@link
@@ -225,7 +224,7 @@ public abstract class FileConfiguration extends MemoryConfiguration {
                     try {
                         section.set(key, ConfigurationSerialization.deserializeObject(typed));
                     } catch (IllegalArgumentException ex) {
-                        throw new YAMLException("Could not deserialize object", ex);
+                        throw new RuntimeException("Could not deserialize object", ex);
                     }
                 }else {
                     convertMapsToSections((Map<?, ?>) value, section.createSection(key));

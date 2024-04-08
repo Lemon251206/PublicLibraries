@@ -13,7 +13,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 public class XmlConverter implements Converter {
 
-    public boolean canConvert(Class clazz) {
+    public boolean canConvert(@SuppressWarnings("rawtypes") Class clazz) {
         return Map.class.isAssignableFrom(clazz);
     }
 

@@ -2,6 +2,7 @@ package nade.empty.configuration.simple;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Reader;
 import java.util.Objects;
 
 import nade.empty.configuration.Configuration;
@@ -9,14 +10,14 @@ import nade.empty.configuration.file.FileConfiguration;
 import nade.empty.configuration.file.yaml.YamlConfiguration;
 import nade.empty.developers.DeveloperMode;
 
-public class YamlBuild extends ConfigurationBuild{
+public class YamlBuild extends ConfigBuild{
     
     private static final String identifier = ".yml";
 
     private String path;
 
     private YamlBuild(String path, boolean replace) {
-        this.path = path;
+        this.path = path.replace("/", File.separator).replace("\\", File.separator);
         this.create(replace);
     }
 
@@ -28,7 +29,7 @@ public class YamlBuild extends ConfigurationBuild{
     }
 
     @Override
-    protected ConfigurationBuild create(boolean replace) {
+    protected ConfigBuild create(boolean replace) {
         DeveloperMode.notEmpty(path, "The path cannot be null or empty.");
         File file = new File(path);
 
@@ -48,33 +49,37 @@ public class YamlBuild extends ConfigurationBuild{
     }
 
     @Override
-    public ConfigurationBuild reload() {
+    public void reload() {
         this.configuration = YamlConfiguration.loadConfiguration(new File(path));
-        return this;
     }
 
     @Override
-    public ConfigurationBuild save(boolean copyDefault) {
-        return this.save(copyDefault, true);
+    public void save(boolean copyDefault) {
+        this.save(copyDefault, true);
     }
 
     @Override
-    public ConfigurationBuild save(boolean copyDefault, boolean reload) {
-        if (Objects.isNull(configuration)) return this;
+    public void save(boolean copyDefault, boolean reload) {
+        if (Objects.isNull(configuration)) return;
         try {
-            this.configuration.options().copyDefaults(copyDefault);
-            ((FileConfiguration) this.configuration).save(configuration.getBaseFile());
-            if (reload) return this.reload();
+            ((Configuration) configuration).options().copyDefaults(copyDefault);
+            ((FileConfiguration) this.configuration).save(((Configuration) configuration).getBaseFile());
+            if (reload) this.reload();
         } catch (IOException e) {
-            DeveloperMode.log("WARN", "An I/O exception occurred while saving a configuration file: " + configuration.getBaseFile().getPath());
+            DeveloperMode.log("WARN", "An I/O exception occurred while saving a configuration file: " + ((Configuration) configuration).getBaseFile().getPath());
         }
-        return this;
+    }
+
+    public void setDefault(Reader reader) {
+        Configuration config = (Configuration) this.configuration;
+        YamlConfiguration.loadConfiguration(reader, config.getBaseFile());
+        config.setDefaults(YamlConfiguration.loadConfiguration(reader, config.getBaseFile()));
     }
 
     @Override
-    public ConfigurationBuild getDefault() {
-        if (Objects.isNull(configuration) || Objects.isNull(configuration.getDefaults())) return null;
-        return new YamlBuild(configuration.getDefaults());
+    public ConfigBuild getDefault() {
+        if (Objects.isNull(configuration) || Objects.isNull(((Configuration) configuration).getDefaults())) return null;
+        return new YamlBuild(((Configuration) configuration).getDefaults());
     }
 
     public static YamlBuild build(String path) {

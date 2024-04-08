@@ -10,14 +10,14 @@ import nade.empty.configuration.Configuration;
 import nade.empty.configuration.file.json.JsonConfiguration;
 import nade.empty.developers.DeveloperMode;
 
-public class JsonBuild extends ConfigurationBuild{
+public class JsonBuild extends ConfigBuild{
     
     private static final String identifier = ".json";
 
     private String path;
 
     private JsonBuild(String path, boolean replace) {
-        this.path = path;
+        this.path = path.replace("/", File.separator).replace("\\", File.separator);
         this.create(replace);
     }
 
@@ -30,7 +30,7 @@ public class JsonBuild extends ConfigurationBuild{
     }
 
     @Override
-    protected ConfigurationBuild create(boolean replace) {
+    protected ConfigBuild create(boolean replace) {
         DeveloperMode.notEmpty(path, "The path cannot be null or empty.");
         File file = new File(path);
 
@@ -50,19 +50,18 @@ public class JsonBuild extends ConfigurationBuild{
     }
 
     @Override
-    public ConfigurationBuild reload() {
+    public void reload() {
         this.configuration = JsonConfiguration.loadConfiguration(new File(path));
-        return this;
     }
     
     @Override
-    public ConfigurationBuild getDefault() {
-        if (Objects.isNull(configuration) || Objects.isNull(configuration.getDefaults())) return null;
-        return new JsonBuild(configuration.getDefaults());
+    public ConfigBuild getDefault() {
+        if (Objects.isNull(configuration) || Objects.isNull(((Configuration) configuration).getDefaults())) return null;
+        return new JsonBuild(((Configuration) configuration).getDefaults());
     }
 
     public static JsonBuild build(String path) {
-        return JsonBuild.build(path, true);
+        return JsonBuild.build(path, false);
     }
 
     public static JsonBuild build(String path, boolean replace) {

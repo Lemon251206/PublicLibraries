@@ -1,3 +1,4 @@
+c:\Users\case\Documents\GitHub\PublicLibrarys\src\main\java\nade\empty\configuration\simple\ConfigBuild.java
 c:\Users\case\Documents\GitHub\PublicLibrarys\src\main\java\nade\empty\configuration\simple\ConfigurationBuild.java
 c:\Users\case\Documents\GitHub\PublicLibrarys\src\main\java\nade\empty\configuration\file\xml\XmlConverter.java
 c:\Users\case\Documents\GitHub\PublicLibrarys\src\main\java\nade\empty\configuration\MemorySection.java
@@ -16,12 +17,16 @@ c:\Users\case\Documents\GitHub\PublicLibrarys\src\main\java\nade\empty\configura
 c:\Users\case\Documents\GitHub\PublicLibrarys\src\main\java\nade\empty\configuration\serialization\DelegateDeserialization.java
 c:\Users\case\Documents\GitHub\PublicLibrarys\src\main\java\nade\empty\configuration\InvalidConfigurationException.java
 c:\Users\case\Documents\GitHub\PublicLibrarys\src\main\java\nade\empty\configuration\file\json\JsonConfiguration.java
+c:\Users\case\Documents\GitHub\PublicLibrarys\src\main\java\nade\empty\util\Resource.java
 c:\Users\case\Documents\GitHub\PublicLibrarys\src\main\java\nade\empty\configuration\file\json\JsonParser.java
 c:\Users\case\Documents\GitHub\PublicLibrarys\src\main\java\nade\empty\configuration\serialization\ConfigurationSerializable.java
 c:\Users\case\Documents\GitHub\PublicLibrarys\src\main\java\nade\empty\configuration\Configuration.java
 c:\Users\case\Documents\GitHub\PublicLibrarys\src\main\java\nade\empty\util\NumberConversions.java
 c:\Users\case\Documents\GitHub\PublicLibrarys\src\main\java\nade\empty\configuration\simple\JsonBuild.java
+c:\Users\case\Documents\GitHub\PublicLibrarys\src\main\java\nade\empty\stream\ObjectStream.java
 c:\Users\case\Documents\GitHub\PublicLibrarys\src\main\java\nade\empty\developers\DeveloperMode.java
 c:\Users\case\Documents\GitHub\PublicLibrarys\src\main\java\nade\empty\configuration\file\yaml\YamlConstructor.java
+c:\Users\case\Documents\GitHub\PublicLibrarys\src\main\java\nade\empty\configuration\simple\ConfigurationSectionBuild.java
 c:\Users\case\Documents\GitHub\PublicLibrarys\src\main\java\nade\empty\configuration\ConfigurationSection.java
 c:\Users\case\Documents\GitHub\PublicLibrarys\src\main\java\nade\empty\configuration\MemoryConfigurationOptions.java
+c:\Users\case\Documents\GitHub\PublicLibrarys\src\main\java\nade\empty\configuration\simple\SectionBuild.java

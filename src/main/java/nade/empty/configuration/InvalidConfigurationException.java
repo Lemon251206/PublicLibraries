@@ -3,7 +3,6 @@ package nade.empty.configuration;
 /**
  * Exception thrown when attempting to load an invalid {@link Configuration}
  */
-@SuppressWarnings("serial")
 public class InvalidConfigurationException extends Exception {
 
     /**
